@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: mlops-diabetes
+Version: 0.1.0
+Summary: MLOps project
+Home-page: 
+Author: aalva
+Author-email: alexis.alvajn@gmail.com
+License: MIT
+Requires-Python: >=3
+
 # mlops-diabetes
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
