@@ -28,6 +28,8 @@ ipykernel = "*"
 dtreeviz = "*"
 mlops-diabetes = {file = ".", editable = true}
 mlflow = "*"
+hyperopt = "*"
+boto3 = "*"
 
 [dev-packages]
 
