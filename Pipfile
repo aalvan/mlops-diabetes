@@ -30,6 +30,7 @@ mlops-diabetes = {file = ".", editable = true}
 mlflow = "*"
 hyperopt = "*"
 boto3 = "*"
+mage-ai = "*"
 
 [dev-packages]
 
