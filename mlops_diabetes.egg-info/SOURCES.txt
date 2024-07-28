@@ -1,7 +1,0 @@
-README.md
-setup.py
-mlops_diabetes.egg-info/PKG-INFO
-mlops_diabetes.egg-info/SOURCES.txt
-mlops_diabetes.egg-info/dependency_links.txt
-mlops_diabetes.egg-info/top_level.txt
-src/__init__.py
