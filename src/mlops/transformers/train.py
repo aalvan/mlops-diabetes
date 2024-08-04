@@ -1,16 +1,12 @@
-from typing import Tuple
+import os
+from typing import Tuple, Dict
 
 import mlflow
-import os
+from mlflow.tracking import MlflowClient
 
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
-
-os.environ["AWS_PROFILE"] = "mlflow-profile"
-TRACKING_SERVER_HOST = "ec2-18-222-74-4.us-east-2.compute.amazonaws.com"
-mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
-mlflow.set_experiment("diabetes-uci")
 
 if 'transformer' not in globals():
     from mage_ai.data_preparation.decorators import transformer
@@ -19,7 +15,7 @@ if 'test' not in globals():
 
 @transformer
 def transform(training_set: 
-    Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
+    Tuple[Dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]
     , *args, **kwargs):
     """
     Template code for a transformer block.
@@ -33,28 +29,33 @@ def transform(training_set:
 
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
-    """
-    X_train_scaled, X_test_scaled, y_train, y_test = training_set
+    """    
+    os.environ["AWS_PROFILE"] = kwargs.get('profile')
+
+    
+    experiment = kwargs.get('experiment')
+    TRACKING_SERVER_HOST = kwargs.get('TRACKING_SERVER_HOST')
+    mlflow.set_tracking_uri(f"http://{TRACKING_SERVER_HOST}:5000")
+    mlflow.set_experiment(experiment)
+    MLFLOW_TRACKING_URI = mlflow.get_tracking_uri()
+
+    hyperparameters, X_train, X_test, y_train, y_test = training_set
 
     data_path = '../data/raw/diabetes.csv'
 
-    with mlflow.start_run():
+    with mlflow.start_run() as run:
+        mlflow.log_params(hyperparameters)
         mlflow.set_tag("developer", "alexis")
         mlflow.set_tag("model", "random_forest")
         mlflow.log_param('train_data_path', f'{data_path}')
 
-        artifact_path = '../models/random_forest.joblib'
+        artifact_path = 'models/random_forest.joblib'
+        print(f'Best params: {hyperparameters}')
 
-        max_depth = 10
-        max_features = 'log2'
-        n_estimators =  50
-
-        rf_model = RandomForestClassifier(
-            max_depth=max_depth, max_features=max_features, n_estimators=n_estimators
-        )
-        rf_model.fit(X_train_scaled, y_train)
+        rf_model = RandomForestClassifier(**hyperparameters)
+        rf_model.fit(X_train, y_train)
         
-        y_pred = rf_model.predict(X_test_scaled)
+        y_pred = rf_model.predict(X_test)
 
         acc = accuracy_score(y_test, y_pred)
 
@@ -62,22 +63,27 @@ def transform(training_set:
         print(f'accuracy: {acc}')
         mlflow.log_metrics(mlmetrics)
         
-        
-        mlparams = {
-        'max_depth': max_depth,
-        'max_features': max_features,
-        'n_estimators': n_estimators
-        }
-        mlflow.log_params(mlparams)
-
         mlflow.sklearn.log_model(
             rf_model,
             artifact_path=artifact_path,
         )
         artifact_uri = mlflow.get_artifact_uri(artifact_path=artifact_path)
-    print(f'artifact_uri: {artifact_uri}')
-    return artifact_uri
+        run_id = run.info.run_id
 
+    model_uri = f"runs:/{run_id}/model"
+    model_name = "diabetes-predictor"
+    result = mlflow.register_model(model_uri=model_uri, name=model_name)
+    model_version = result.version
+
+    client = MlflowClient(tracking_uri=MLFLOW_TRACKING_URI)
+    client.transition_model_version_stage(
+        name=model_name,
+        version=model_version,
+        stage="Production",
+        archive_existing_versions=False
+    )
+
+    return f'Model {model_name} version {model_version} transitioned to stage "Production"'
 
 @test
 def test_output(output, *args) -> None:

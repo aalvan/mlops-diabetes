@@ -1,8 +1,7 @@
+from typing import Tuple, Dict
 import pandas as pd
-from typing import Tuple
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from src.mlops.utils.models.sklearn import tune_hyperparameters
 
 if 'transformer' not in globals():
     from mage_ai.data_preparation.decorators import transformer
@@ -11,8 +10,8 @@ if 'test' not in globals():
 
 
 @transformer
-def transform(df: pd.DataFrame, *args, **kwargs
-)->Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def transform(training_data: Tuple[pd.DataFrame, pd.DataFrame, 
+pd.DataFrame, pd.DataFrame], *args, **kwargs)-> Dict:
     """
     Template code for a transformer block.
 
@@ -26,17 +25,18 @@ def transform(df: pd.DataFrame, *args, **kwargs
     Returns:
         Anything (e.g. data frame, dictionary, array, int, str, etc.)
     """
-    # Specify your transformation logic here
 
-    random_state = kwargs.get('random_state')
-    X = df.drop('Outcome', axis=1)
-    y = df['Outcome']
-    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
-                                                        random_state=random_state,
-                                                       stratify=y)
+    profile = kwargs.get('profile')
+    TRACKING_SERVER_HOST = kwargs.get('TRACKING_SERVER_HOST')
+    experiment = kwargs.get('experiment')
+    max_evals = 5
+    X_train, X_test, y_train, y_test = training_data
+   
+    hyperparameters = tune_hyperparameters(X_train=X_train, y_train=y_train,
+    X_test=X_test, y_test=y_test, max_evals=max_evals,profile=profile,
+    TRACKING_SERVER_HOST=TRACKING_SERVER_HOST, experiment=experiment)
 
-    return X_train, X_test, y_train, y_test
+    return hyperparameters, X_train, X_test, y_train, y_test
 
 
 @test
@@ -45,3 +45,4 @@ def test_output(output, *args) -> None:
     Template code for testing the output of the block.
     """
     assert output is not None, 'The output is undefined'
+ 

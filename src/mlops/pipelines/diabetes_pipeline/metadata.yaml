@@ -36,7 +36,7 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - train
+  - hyperparameter_tuning
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -49,6 +49,38 @@ blocks:
   upstream_blocks:
   - prepare
   uuid: build
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - train
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: hyperparameter_tuning
+  retry_config: null
+  status: executed
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - build
+  uuid: hyperparameter_tuning
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: Model Registry
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: model_registry
 - all_upstream_blocks_executed: true
   color: null
   configuration:
@@ -66,7 +98,7 @@ blocks:
   timeout: null
   type: transformer
   upstream_blocks:
-  - build
+  - hyperparameter_tuning
   uuid: train
 cache_block_output_in_memory: false
 callbacks: []
@@ -91,6 +123,9 @@ tags: []
 type: python
 uuid: diabetes_pipeline
 variables:
+  TRACKING_SERVER_HOST: ec2-3-143-242-26.us-east-2.compute.amazonaws.com
+  experiment: diabetes-uci
+  profile: mlflow-profile
   random_state: 42
 variables_dir: /workspaces/mlops-diabetes/src/mlops/.mage_data
 widgets: []
