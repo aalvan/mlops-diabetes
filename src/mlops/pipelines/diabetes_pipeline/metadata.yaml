@@ -123,7 +123,7 @@ tags: []
 type: python
 uuid: diabetes_pipeline
 variables:
-  TRACKING_SERVER_HOST: ec2-3-143-242-26.us-east-2.compute.amazonaws.com
+  TRACKING_SERVER_HOST: ec2-18-222-215-179.us-east-2.compute.amazonaws.com
   experiment: diabetes-uci
   profile: mlflow-profile
   random_state: 42

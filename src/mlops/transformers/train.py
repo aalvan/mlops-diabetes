@@ -49,7 +49,7 @@ def transform(training_set:
         mlflow.set_tag("model", "random_forest")
         mlflow.log_param('train_data_path', f'{data_path}')
 
-        artifact_path = 'models/random_forest.joblib'
+        artifact_path = 'model'
         print(f'Best params: {hyperparameters}')
 
         rf_model = RandomForestClassifier(**hyperparameters)
