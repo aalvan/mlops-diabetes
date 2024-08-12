@@ -18,20 +18,23 @@ Important: This project is designed to provide predictions and insights based on
 - [Web Service](#web-service)
 - [Monitoring](#monitoring)
 - [Installation](#installation)
-- [Usage](#usage)
 
 ## Orchestration
-
-To start the orchestration process for running the MLOps pipeline, use the following command:
+To start the Mage interface , use the following command:
 
 ```
 mage start src/mlops
 ```
-This command initiates the pipeline defined in the src/mlops directory, handling tasks such as data preprocessing, model training, and evaluation.
+
+To start the orchestration process for running the MLOps pipeline, run the `diabetes_pipeline` in the Pipelines section.
+
+![Diabetes Pipeline](images/mage-pipeline.png)
+
+This pipeline, defined in the src/mlops directory, handles tasks such as data preprocessing, model training, and evaluation. In the final stage of the MLOps pipeline, the model is first registered and then transitioned to the production environment. This decision is based on the assumption that the model, having undergone extensive hyperparameter tuning and validation, represents the best-performing version available. The registration process ensures that the model is properly cataloged in the MLflow model registry. Transitioning to production signifies that this model has met the necessary performance criteria and is deemed ready for deployment in a live setting.
 
 ## Web Service
 
-To build and run the web service that serves the diabetes prediction model:
+To build and run the web service that serves the diabetes prediction model, navigate to the web-service-mlflow directory and use the following commands:
 
 ### Build the Docker Image
 ```
@@ -41,15 +44,21 @@ docker build -t diabetes-prediction-service:v1 .
 ```
 docker run -it --rm -e AWS_PROFILE=mlflow-profile -v ~/.aws:/root/.aws -p 9696:9696 diabetes-prediction-service:v1
 ```
-This command runs the web service in a Docker container, making it accessible on port 9696. The service can be used to send patient data and receive diabetes predictions.
+This command runs the web service in a Docker container, making it accessible on port 9696. The service can be used to send patient data and receive diabetes predictions. Additionally, the API can be tested using the test.py file.
 
 ## Monitoring
+To create a report, use the monitoring.ipynb file in the notebooks directory. After generating the report, you can monitor the deployed models using Evidently AI. Navigate to the src/monitoring directory and start the UI with:
+
 ```
 cd src/monitoring && evidently ui
 ```
-To monitor the deployed models using Evidently AI, navigate to the monitoring directory and start the UI:
-
 This command launches the Evidently UI, providing a dashboard for monitoring the model’s performance over time, ensuring its predictions remain accurate and reliable.
+
+Additionally, you can build a Docker Compose file to visualize the data using Grafana with the following command:
+```
+docker-compose up
+```
+Note: The visualization feature is still under development. Currently, data is saved in PostgreSQL but cannot be fully visualized yet. I am working on simulating synthetic data to improve visualization in Grafana over time.
 
 ## Installation
 
@@ -88,7 +97,7 @@ This command launches the Evidently UI, providing a dashboard for monitoring the
 5. **Install the project as a module using `setup.py`:**
 
     ```bash
-    pipenv run python setup.py install
+    pipenv install --editable .
     ```
 
 6. **Set up your AWS credentials:**
