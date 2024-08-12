@@ -44,7 +44,7 @@ docker run -it --rm -e AWS_PROFILE=mlflow-profile -v ~/.aws:/root/.aws -p 9696:9
 This command runs the web service in a Docker container, making it accessible on port 9696. The service can be used to send patient data and receive diabetes predictions.
 
 ## Monitoring
-````
+```
 cd src/monitoring && evidently ui
 ```
 To monitor the deployed models using Evidently AI, navigate to the monitoring directory and start the UI:
