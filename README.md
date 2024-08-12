@@ -7,6 +7,7 @@
 ## Project Overview
 
 Diabetes is a chronic medical condition that affects millions of people worldwide. It is characterized by high levels of sugar (glucose) in the blood, which can lead to serious health complications if not properly managed. The aim of this project is to leverage machine learning techniques to predict the likelihood of diabetes in patients and to assist in the management of the condition through data-driven insights.
+
 --------
 ## Table of Contents
 
