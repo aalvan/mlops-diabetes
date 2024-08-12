@@ -1,0 +1,3 @@
+# Model registry
+
+In this stage of the MLOps pipeline, the model is first registered and then transitioned to the production environment. This decision is based on the assumption that the model, having undergone extensive hyperparameter tuning and validation, represents the best-performing version available. The registration process ensures that the model is properly cataloged in the MLflow model registry. The transition to production signifies that this model has met the necessary performance criteria and is deemed ready for deployment in a live setting.
