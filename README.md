@@ -109,4 +109,6 @@ Note: The visualization feature is still under development. Currently, data is s
 
 This setup ensures that your Python paths are correctly handled and that all dependencies are properly managed using `pipenv`.
 
+## Configuration Note
 
+Important: The project uses MLFlow in the cloud. Ensure that you update the TRACKING_SERVER_HOST variable to point to your MLFlow tracking server. This is crucial for proper logging and tracking of your experiments, as well as for loading the model in different scripts.
