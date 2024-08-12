@@ -1,0 +1,72 @@
+{
+  "id": "963fc3f1-f61c-4acf-ad8f-e735c7e2c726",
+  "name": "Diabetes Data Quality",
+  "description": "\nThe 'Diabetes Data Quality' project focuses on monitoring and maintaining the quality of data used for predicting diabetes outcomes. This project includes implementing data quality checks, tracking data drift, and ensuring the consistency and accuracy of the datasets over time. The aim is to detect any anomalies or issues early in the data pipeline to enhance the reliability and performance of the predictive models used for diabetes risk assessment.\n",
+  "dashboard": {
+    "name": "Diabetes Data Quality",
+    "panels": [
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelCounter",
+        "id": "66405919-f3cc-4416-a452-f4e67a436181",
+        "title": "Diabetes data dashboard",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 2,
+        "agg": "none",
+        "value": null,
+        "text": null
+      },
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelPlot",
+        "id": "35ff7ae6-6e1b-475b-89b0-f5ea85c1617c",
+        "title": "Inference Count",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 1,
+        "values": [
+          {
+            "field_path": "current.number_of_rows",
+            "metric_id": "DatasetMissingValuesMetric",
+            "metric_hash": null,
+            "metric_args": {},
+            "legend": "count"
+          }
+        ],
+        "plot_type": "bar"
+      },
+      {
+        "type": "evidently.ui.dashboards.reports.DashboardPanelPlot",
+        "id": "1e1390d5-f751-4697-a250-3fb982868ad1",
+        "title": "Number of Missing Values",
+        "filter": {
+          "metadata_values": {},
+          "tag_values": [],
+          "include_test_suites": false
+        },
+        "size": 1,
+        "values": [
+          {
+            "field_path": "current.number_of_,missing_values",
+            "metric_id": "DatasetMissingValuesMetric",
+            "metric_hash": null,
+            "metric_args": {},
+            "legend": "count"
+          }
+        ],
+        "plot_type": "line"
+      }
+    ],
+    "tabs": [],
+    "tab_id_to_panel_ids": {}
+  },
+  "team_id": null,
+  "date_from": null,
+  "date_to": null,
+  "created_at": "2024-08-11T21:31:33.505161"
+}
