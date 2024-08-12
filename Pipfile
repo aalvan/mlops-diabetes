@@ -31,6 +31,8 @@ mlflow = "*"
 hyperopt = "*"
 boto3 = "*"
 mage-ai = "*"
+evidently = "*"
+psycopg = "*"
 
 [dev-packages]
 
